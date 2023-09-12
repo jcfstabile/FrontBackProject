@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File with XMLHttpRequest</title>
+</head>
+<body>
+    <button type="button" onclick="request('GET','/cart')">get /cart</button>
+    <button type="button" onclick="request('GET','/cart/product/3')">get /cart/product/3</button>
+    <button type="button" onclick="request('GET','/cart?limit=3&order=des')">get /cart?limit=3&order=des</button>
+    <button type="button" onclick="request('GET','/cart/total')">get /cart/total</button>
+    <button type="button" onclick="request('PUT','/cart/42')">put /cart/42</button>
+    <button type="button" onclick="request('POST','/cart/'+Math.floor(Math.random() * 100))">post /cart/rndm</button>
+    <button type="button" onclick="request('DELETE','/cart/'+Math.floor(Math.random() * 100))">delete /cart/rnd</button>
+    <button type="button" onclick="request('GET','/status')">get status</button>
+
+    <p id="output"></p>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file">
+        <button type="button" id="uploadButton" onclick="uploadFile()">Upload</button>
+    </form>
+    <script>
+      function request(method, endpoint){
+        const xhr = new XMLHttpRequest();
+        const url = 'http://localhost:4567' + endpoint;
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4) {
+            <!-- callback(xhr.response); -->
+            document.getElementById("output").innerHTML = xhr.response;
+          }
+        };
+        xhr.open(method, url);
+        xhr.send();
+      }
+      function getCart(){
+        const url = 'http://localhost:4567/cart';
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4) {
+            <!-- callback(xhr.response); -->
+            document.getElementById("output").innerHTML = xhr.response;
+          }
+        };
+        xhr.open('GET', url);
+        xhr.send();
+      }
+
+      function checkLoadStatus(){
+        const url = 'http://localhost:4567/status';
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              document.getElementById("uploadButton").style.backgroundColor = 'limegreen';
+            } else {
+              document.getElementById("uploadButton").style.backgroundColor = 'red';
+            }
+          } else {
+              document.getElementById("uploadButton").style.backgroundColor = 'blue';
+          }
+          console.log('* Response:', xhr.responseText);
+
+        }
+        xhr.open('GET', url);
+        xhr.send();
+      }
+
+      function uploadFile() {
+        const url = 'http://localhost:4567/upload';
+        const formData = new FormData();
+        const fileInput = document.getElementById('fileInput');
+        formData.append('file', fileInput.files[0]);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', url);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // TODO set visual feedback about upload completion
+            if (xhr.status === 201) {
+              console.log('* Response:', xhr.responseText);
+              <!-- checkLoadStatus(); -->
+            }
+          }
+        };
+        xhr.send(formData);
+      }
+    </script>
+</body>
+</html>
+

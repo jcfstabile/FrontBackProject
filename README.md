@@ -9,25 +9,14 @@ gem install puma
 
 ### Try it
 
-1. on *backend.rb*
-
-```
-require 'sinatra'
-
-get '/' do
-  'Hola you'
-end
-```
-
-
-2. run (once) with
+1. run (once) with
 
 ```
 $ . ./up.sh
 ```
 
 
-3. keep server running
+2. keep server running
 
 ```
 $ . ./backend_up.sh

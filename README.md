@@ -20,10 +20,10 @@ end
 ```
 
 
-2. run with
+2. run (once) with
 
 ```
-$ ruby backend.rb
+$ . ./up.sh
 ```
 
 

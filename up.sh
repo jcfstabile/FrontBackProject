@@ -1,1 +1,1 @@
-ruby backend.rb
+ruby backend/backend.rb
